@@ -1,45 +1,22 @@
 <script>
-  // @ts-nocheck
-
-  import { onMount } from 'svelte';
+  import { redirect } from '@sveltejs/kit';
+  import { Button } from 'konsta/svelte';
+  import Icon from '@iconify/svelte';
 
   export let data;
-  $: console.log(data);
-  let repos;
+  if (data.user) throw redirect(302, '/repos');
 
-  // $: {
-  //   if (data.user) {
-  //     fetch(`https://api.github.com/users/${data.user.login}}/repos`, {
-  //       headers: {
-  //         Accept: 'application/vnd.github+json',
-  //         Authorization: data.token,
-  //       },
-  //     })
-  //       .then((resp) => resp.json())
-  //       .then(
-  //         (json) =>
-  //           (repos = [
-  //             ...json.map((repo) => ({
-  //               name: repo.name,
-  //             })),
-  //           ])
-  //       );
-  //   }
-  // }
+  $: console.log(data);
 </script>
 
-<main>
-  <h1>Welcome {data.user?.login}</h1>
-  <a href="/login">
-    <button>Login using Github</button>
-  </a>
+<main class="flex flex-col items-center justify-center h-screen gap-10">
+  <h1 class="text-4xl">Welcome to progressCheck</h1>
+  <span class="flex gap-5 items-center">
+    <a href="/login">
+      <Button raised rounded large class="k-color-brand-green" tonal
+        >Login using Github</Button
+      >
+    </a>
+    <Icon icon="bi:github" width="25" />
+  </span>
 </main>
-
-<style>
-  main {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-around;
-  }
-</style>

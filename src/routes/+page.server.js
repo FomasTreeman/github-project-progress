@@ -1,10 +1,10 @@
+import { redirect } from '@sveltejs/kit';
+
 export function load({ cookies }) {
-  // const user = cookies.get('user');
-  const session = JSON.parse(cookies.get('session'));
-  console.log();
-  if (!session) return { user: null, token: null };
-  return {
-    user: session.user,
-    token: session.token,
-  };
+  const session = cookies.get('session');
+  console.log(session);
+  // fetch repos and issues and add them to the props
+  if (!session) return { user: null };
+  if (session?.user) throw redirect(308, '/repos');
+  return JSON.parse(session);
 }
