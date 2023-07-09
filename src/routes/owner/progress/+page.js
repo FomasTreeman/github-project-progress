@@ -2,18 +2,25 @@ export async function load({ url, parent }) {
   const { user, token } = await parent();
   const repo = url.searchParams.get('repo');
 
-  console.log(user, repo);
-
   const issues = await fetch(
     `https://api.github.com/repos/${user.login}/${repo}/issues`,
     {
       headers: {
         Accept: 'application/vnd.github+json',
-        Authorization: token,
+        Authorization: `Bearer ${token.access_token}`,
       },
     }
-  ).then((resp) => resp.json());
+  )
+    .then((resp) => resp.json())
+    .then((json) =>
+      json.map((issue) => ({
+        labels: issue.labels,
+        title: issue.title,
+        milestone: issue.milestone,
+      }))
+    );
 
+  console.log(issues);
   return {
     issues,
   };

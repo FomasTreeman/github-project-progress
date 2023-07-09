@@ -2,20 +2,21 @@
   import { Button } from 'konsta/svelte';
 
   export let data;
-  $: console.log(data);
 </script>
 
 <main>
-  <form method="GET" action="/progress">
+  <form method="GET" action="/owner/progress" class="m-5">
     <label for="repo" class="text-xl m-5">Choose a repo:</label>
-    <!-- {#if data?.repos}
-      <select id="repo" name="repo">
-        {#each data.repos as repo}
-          <option value={repo.name}> {repo.name} </option>
-        {/each}
-      </select>
-    {/if} -->
-    <Button raised rounded large class="k-color-brand-green" tonal>
+    <select
+      id="repo"
+      name="repo"
+      class="bg-slate-800 text-slate-100 rounded-md p-2"
+    >
+      {#each data.repos as repo}
+        <option value={repo}> {repo} </option>
+      {/each}
+    </select>
+    <Button raised rounded large class="k-color-brand-green m-10" tonal>
       Check progress
     </Button>
   </form>

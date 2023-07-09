@@ -1,20 +1,26 @@
 import fetch from 'node-fetch';
+
+interface IToken {
+  access_token: string,
+  token_type: "bearer",
+  scope?: string
+}
+
 const tokenURL = 'https://github.com/login/oauth/access_token';
 const userURL = 'https://api.github.com/user';
 
 const clientId = import.meta.env.VITE_CLIENT_ID;
 const secret = import.meta.env.VITE_CLIENT_SECRET;
 
-export async function GET({ url, cookies }) {
+export async function GET({ url, cookies }: {url: {searchParams: {get: (code: string) => string}} ,cookies: {get: (cookie: string) => string}, set: (name:string, content: string) => {}}) {
   const code = url.searchParams.get('code');
 
   // get accessToken
-  const token = await getToken(code);
+  const token = await getToken(code) as IToken;
   // get user
   const user = await getUser(token);
 
   const sessionCookie = JSON.stringify({ user, token });
-  console.log(sessionCookie);
 
   cookies.set('session', sessionCookie);
 
@@ -26,17 +32,17 @@ export async function GET({ url, cookies }) {
   });
 }
 
-function getUser(token) {
-  return fetch(userURL, {
+async function getUser({access_token}: IToken) {
+  return await fetch(userURL, {
     headers: {
       Accept: 'application/json',
-      Authorization: `Bearer ${token}`,
+      Authorization: `Bearer ${access_token}`,
     },
   }).then((r) => r.json());
 }
 
-function getToken(code) {
-  return fetch(tokenURL, {
+async function getToken(code: string) {
+  return await fetch(tokenURL, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -46,6 +52,7 @@ function getToken(code) {
       client_id: clientId,
       client_secret: secret,
       code,
+      
     }),
   }).then((r) => r.json());
 }
