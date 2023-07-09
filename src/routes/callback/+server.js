@@ -47,7 +47,5 @@ function getToken(code) {
       client_secret: secret,
       code,
     }),
-  })
-    .then((r) => r.json())
-    .then((r) => r.access_token);
+  }).then((r) => r.json());
 }

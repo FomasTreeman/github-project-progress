@@ -1,12 +1,11 @@
 <script>
-  import { redirect } from '@sveltejs/kit';
   import { Button } from 'konsta/svelte';
   import Icon from '@iconify/svelte';
+  import { goto } from '$app/navigation';
 
   export let data;
-  if (data.user) throw redirect(302, '/repos');
 
-  $: console.log(data);
+  // if (data?.user) goto('/repos');
 </script>
 
 <main class="flex flex-col items-center justify-center h-screen gap-10">
