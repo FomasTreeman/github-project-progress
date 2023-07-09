@@ -1,10 +1,10 @@
 <script>
-  import { Button } from 'konsta/svelte';
+  import { Page, Button } from 'konsta/svelte';
 
   export let data;
 </script>
 
-<main>
+<Page>
   <form method="GET" action="/owner/progress" class="m-5">
     <label for="repo" class="text-xl m-5">Choose a repo:</label>
     <select
@@ -20,4 +20,4 @@
       Check progress
     </Button>
   </form>
-</main>
+</Page>

@@ -14,13 +14,12 @@ export async function load({ url, parent }) {
     .then((resp) => resp.json())
     .then((json) =>
       json.map((issue) => ({
-        labels: issue.labels,
+        labels: issue.labels.map((label) => label.name),
         title: issue.title,
         milestone: issue.milestone,
       }))
     );
 
-  console.log(issues);
   return {
     issues,
   };
