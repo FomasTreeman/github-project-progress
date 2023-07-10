@@ -1,7 +1,9 @@
 <script lang="ts">
   import { Page, Progressbar } from 'konsta/svelte';
+  import type { IIssue } from '../../progress/$types.js';
   export let data;
-  let progress = 0;
+  let expectedProgress = 0;
+  let actualProgress = 0;
 
   /**
    * Get the total expected or actuals from a repo
@@ -25,18 +27,26 @@
   $: {
     const totalExpected = expectedActualTotal('E');
     const totalActuals = expectedActualTotal('A');
-    console.log(totalExpected);
-    console.log(totalActuals);
-    console.log(data.issues.length);
-    const total = (totalExpected / data.issues.length) * totalActuals;
+    const totalClosed: number = data.issues.reduce(
+      (acc: number, issue: IIssue): number =>
+        issue.state === 'closed' ? (acc += 1) : acc,
+      0
+    );
+    const expectedTotal = (totalExpected / data.issues.length) * totalClosed;
+    const actualTotal = (totalActuals / data.issues.length) * totalClosed;
     // progress = total / totalCompleted;
-    progress = parseInt((total / 100).toFixed(2));
+    actualProgress = parseInt((actualTotal / 100).toFixed(2));
+    expectedProgress = parseInt((expectedTotal / 100).toFixed(2));
   }
 </script>
 
 <Page>
-  <h2 class="m-20 text-4xl">{(progress * 100).toFixed(2)} %</h2>
-  <Progressbar {progress} class="bg-slate-200 m-20" />
+  <h2 class="m-20 text-4xl">{(expectedProgress * 100).toFixed(2)} %</h2>
+  <Progressbar progress={expectedProgress} class="bg-slate-200 m-20" />
+  <Progressbar
+    progress={actualProgress}
+    class="bg-slate-200 text-sky-400 m-20"
+  />
   <ul class="pl-5">
     {#each data.issues as issue}
       <h2>{issue.labels[0]} ❌ : {issue.title}</h2>

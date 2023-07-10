@@ -1,4 +1,5 @@
 import githubFetch from '../../../utils/fetch';
+import type { IIssue } from '../../progress/$types';
 
 const expectedLabels = ['E1', 'E2', 'E3', 'E5', 'E8', 'A1', 'A2', 'A3', 'A5', 'A8']
 const relativeColours = []
@@ -13,7 +14,7 @@ export async function load({ url, parent }: {url: any, parent: any}) {
   const { user, token } = await parent();
   const repo = url.searchParams.get('repo');
 
-  const issues = await githubFetch(
+  const issues: IIssue[] = await githubFetch(
     token.access_token,
     `repos/${user.login}/${repo}/issues`
   ).then((json) =>
@@ -21,13 +22,17 @@ export async function load({ url, parent }: {url: any, parent: any}) {
       labels: issue.labels.map((label: any) => label.name),
       title: issue.title,
       milestone: issue.milestone,
+      state: issue.state
     }))
   );
 
-  const labels = await githubFetch(
-    token.access_token,
-    `repos/${user.login}/${repo}/labels`
-  )
+
+  // ** create labels that dont already exist
+
+  // const labels = await githubFetch(
+  //   token.access_token,
+  //   `repos/${user.login}/${repo}/labels`
+  // )
   return {
     issues,
   };

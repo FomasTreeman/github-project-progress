@@ -1,5 +1,5 @@
 import { redirect } from '@sveltejs/kit';
-import fetch from 'node-fetch';
+// import fetch from 'node-fetch';
 
 export async function load({ cookies }: {cookies: any}) {
   const session = cookies.get('session');
