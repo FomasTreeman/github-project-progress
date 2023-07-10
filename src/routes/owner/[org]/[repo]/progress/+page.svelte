@@ -52,10 +52,14 @@
   <Block strongIos outlineIos>
     <Breadcrumbs>
       <a href="/owner/repos">
-        <BreadcrumbsItem>fac27</BreadcrumbsItem>
+        <BreadcrumbsItem
+          >{window.location.pathname.slice(1).split('/')[1]}</BreadcrumbsItem
+        >
       </a>
       <BreadcrumbsSeparator />
-      <BreadcrumbsItem active>this repo</BreadcrumbsItem>
+      <BreadcrumbsItem active
+        >{window.location.pathname.slice(1).split('/')[2]}</BreadcrumbsItem
+      >
     </Breadcrumbs>
   </Block>
   <h2 class="m-20 text-4xl">
