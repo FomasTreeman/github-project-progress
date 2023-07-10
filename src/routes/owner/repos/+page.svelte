@@ -21,7 +21,7 @@
 <Page>
   <Navbar
     title="PICK YOUR REPO TO VIEW YOUR PROGRESS"
-    className="top-0 sticky"
+    className="top-0 sticky font-karla"
   />
   <div class="flex flex-col">
     <Block strong inset class="flex items-center gap-4">
@@ -44,13 +44,12 @@
     <Block strong inset>
       <form
         method="get"
-        action="/owner/progress"
+        action={`/owner/${org ? org : 'personal'}/${repo}/progress`}
         class="flex items-center gap-4"
       >
         <label for="repo" class="text-xl">Choose a repo:</label>
         <select
           id="repo"
-          name="repo"
           bind:value={repo}
           class="bg-slate-800 text-slate-100 rounded-md p-2"
           required

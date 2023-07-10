@@ -9,26 +9,21 @@
     List,
     ListItem,
   } from 'konsta/svelte';
-  import type { IIssue } from '../../../types/types';
+  import type { IIssue } from '../../../../../types/types';
   export let data;
   let expectedProgress = 0;
   let actualProgress = 0;
 
   $: {
-    const estimated = data.issues.reduce(
-      (acc: number, issue: any) =>
-        acc +
-          parseInt(
-            issue.labels
-              .find((label: string) => label.toUpperCase().includes('E'))
-              ?.slice(1)
-          ) || 0,
-      0
-    );
+    const estimated = data.issues.reduce((acc: number, issue: any) => {
+      const expected = issue.labels.find((label: string) => label.match('^E'));
+      return expected ? acc + parseInt(expected[1]) : acc;
+    }, 0);
+
     const projected: number = data.issues.reduce(
       (acc: number, issue: IIssue): number => {
-        const actual = issue.labels.find((label) => label.includes('A'));
-        const expected = issue.labels.find((label) => label.includes('E'));
+        const actual = issue.labels.find((label) => label.match('^A'));
+        const expected = issue.labels.find((label) => label.match('^E'));
         return actual
           ? acc + parseInt(actual[1])
           : expected
@@ -37,15 +32,11 @@
       },
       0
     );
+
     const originalEstimate = data.issues.reduce(
       (acc: number, issue: IIssue): number => {
-        const actual = issue.labels.find((label) => label.includes('A'));
-        const expected = issue.labels.find((label) => label.includes('E'));
-        return issue.state === 'closed'
-          ? actual
-            ? acc + parseInt(actual[1])
-            : acc
-          : acc;
+        const actual = issue.labels.find((label) => label.match('^A'));
+        return actual ? acc + parseInt(actual[1]) : acc;
       },
       0
     );
@@ -82,8 +73,8 @@
   <List strong outline class="pl-5 m-20 pb-3">
     {#each data.issues as issue}
       <ListItem>
-        {issue.labels.join(' -> ')}
-        {issue.labels.toString().includes('A') ? '✅' : '❌'} : {issue.title}
+        {issue.labels.filter((label) => label.match('.*A|E[0-9]')).join(' -> ')}
+        {issue.labels.toString().match('.*A[0-9]') ? '✅' : '❌'} : {issue.title}
       </ListItem>
     {/each}
   </List>
