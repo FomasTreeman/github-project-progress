@@ -41,7 +41,6 @@
       0
     );
 
-    console.log(estimated, originalEstimate, projected);
     const expectedTotal = (100 / estimated) * originalEstimate || 0;
     const actualTotal = (100 / projected) * originalEstimate || 0;
     actualProgress = parseInt(actualTotal.toFixed(4)) / 100;
