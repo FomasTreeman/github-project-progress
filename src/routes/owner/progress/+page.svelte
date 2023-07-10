@@ -26,25 +26,52 @@
 
   $: {
     const totalExpected = expectedActualTotal('E');
-    const totalActuals = expectedActualTotal('A');
+    // const totalActuals = expectedActualTotal('A');
     const totalClosed: number = data.issues.reduce(
-      (acc: number, issue: IIssue): number =>
-        issue.state === 'closed' ? acc + 1 : 0,
+      (acc: number, issue: IIssue): number => {
+        const actual = issue.labels.find((label) => label.includes('A'));
+        const expected = issue.labels.find((label) => label.includes('E'));
+        return issue.state === 'closed'
+          ? actual
+            ? acc + parseInt(actual[1])
+            : expected
+            ? acc + parseInt(expected[1])
+            : acc
+          : acc;
+      },
+      0
+    );
+    const totalClosedExpected = data.issues.reduce(
+      (acc: number, issue: IIssue): number => {
+        const actual = issue.labels.find((label) => label.includes('A'));
+        const expected = issue.labels.find((label) => label.includes('E'));
+        return issue.state === 'closed'
+          ? expected
+            ? acc + parseInt(expected[1])
+            : acc
+          : acc;
+      },
       0
     );
 
-    console.log(totalClosed);
-    const expectedTotal =
-      totalExpected * (data.issues.length / totalClosed) || 0;
-    const actualTotal = (totalActuals * data.issues.length) / totalClosed || 0;
-    actualProgress = parseInt((actualTotal / 100).toFixed(2));
-    expectedProgress = parseInt((expectedTotal / 100).toFixed(2));
+    const expectedTotal = (100 / totalExpected) * totalClosedExpected || 0;
+    const actualTotal = (100 / totalExpected) * totalClosed || 0;
+    console.log(totalClosedExpected);
+    actualProgress = parseInt(actualTotal.toFixed(4)) / 100;
+    expectedProgress = parseInt(expectedTotal.toFixed(4)) / 100;
+    console.log(actualProgress, expectedProgress);
   }
 </script>
 
 <Page>
-  <h2 class="m-20 text-4xl">{(expectedProgress * 100).toFixed(2)} %</h2>
+  <h2 class="m-20 text-4xl">
+    Expected Progress: {(expectedProgress * 100).toFixed(2)} %
+  </h2>
   <Progressbar progress={expectedProgress} class="bg-slate-200 m-20" />
+  <h2 class="m-20 text-4xl">
+    Actual Progress: {(actualProgress * 100).toFixed(2)} %
+    <p>(bigger is better)</p>
+  </h2>
   <Progressbar
     progress={actualProgress}
     class="bg-slate-200 text-sky-400 m-20"
