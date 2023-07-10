@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-/* @layer base {
+@layer base {
   @font-face {
     font-family: Karla;
     src: url('fonts/Karla.ttf') format('opentype');
@@ -12,4 +12,4 @@
     font-family: Inconsolata;
     src: url('fonts/Inconsolata.ttf') format('opentype');
   }
-} */
+}
