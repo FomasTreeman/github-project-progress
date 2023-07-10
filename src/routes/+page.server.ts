@@ -3,6 +3,7 @@ import { redirect } from '@sveltejs/kit';
 
 export async function load({ cookies }: {cookies: any}) {
   const session = cookies.get('session');
+  console.log('👩‍💻', session)
   // fetch repos and issues and add them to the props
   if (!session) return;
 

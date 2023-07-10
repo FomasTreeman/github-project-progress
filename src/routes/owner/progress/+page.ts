@@ -10,13 +10,13 @@ const checkMissingLabels = (json: any) => {
   return expectedLabels.filter(label => !foundLabels.includes(label))
 }
 
-export async function load({ url, parent }: {url: any, parent: any}) {
+export async function load({ url, parent, fetch }: {url: any, parent: any, fetch: any}) {
   const { user, token } = await parent();
   const repo = url.searchParams.get('repo');
 
-  const issues: IIssue[] = await githubFetch(
+  const issues: IIssue[] = await githubFetch(fetch,
     token.access_token,
-    `repos/${user.login}/${repo}/issues`
+    `/repos/${user.login}/${repo}/issues?state=all`
   ).then((json) =>
     json.map((issue: any) => ({
       labels: issue.labels.map((label: any) => label.name),
@@ -25,7 +25,6 @@ export async function load({ url, parent }: {url: any, parent: any}) {
       state: issue.state
     }))
   );
-
 
   // ** create labels that dont already exist
 

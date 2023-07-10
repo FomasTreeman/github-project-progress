@@ -1,18 +1,19 @@
-import fetch from 'node-fetch';
-
 /**
  *
+ * @param {any} fetch
  * @param {string} accessToken
  * @param {string} path
  * @returns {Promise<any>}
  */
-const githubFetch = async (accessToken, path) => {
-  return await fetch(`https://api.github.com/${path}`, {
+const githubFetch = async (fetch, accessToken, path) => {
+  console.log(`Fetching https://api.github.com${path}`);
+  const response = await fetch(`https://api.github.com${path}`, {
     headers: {
       Accept: 'application/vnd.github+json',
       Authorization: `Bearer ${accessToken}`,
     },
-  }).then((resp) => resp.json());
+  });
+  return response.json();
 };
 
 export default githubFetch;

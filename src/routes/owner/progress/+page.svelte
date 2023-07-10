@@ -29,12 +29,14 @@
     const totalActuals = expectedActualTotal('A');
     const totalClosed: number = data.issues.reduce(
       (acc: number, issue: IIssue): number =>
-        issue.state === 'closed' ? (acc += 1) : acc,
+        issue.state === 'closed' ? acc + 1 : 0,
       0
     );
-    const expectedTotal = (totalExpected / data.issues.length) * totalClosed;
-    const actualTotal = (totalActuals / data.issues.length) * totalClosed;
-    // progress = total / totalCompleted;
+
+    console.log(totalClosed);
+    const expectedTotal =
+      totalExpected * (data.issues.length / totalClosed) || 0;
+    const actualTotal = (totalActuals * data.issues.length) / totalClosed || 0;
     actualProgress = parseInt((actualTotal / 100).toFixed(2));
     expectedProgress = parseInt((expectedTotal / 100).toFixed(2));
   }
@@ -49,7 +51,10 @@
   />
   <ul class="pl-5">
     {#each data.issues as issue}
-      <h2>{issue.labels[0]} ❌ : {issue.title}</h2>
+      <h2>
+        {issue.labels.join(' -> ')}
+        {issue.labels.toString().includes('A') ? '✅' : '❌'} : {issue.title}
+      </h2>
     {/each}
   </ul>
 </Page>

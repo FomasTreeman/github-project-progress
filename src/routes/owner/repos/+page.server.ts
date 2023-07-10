@@ -11,9 +11,12 @@ export async function load({ parent }: {parent: any}) {
     }
   )
     .then((r) => r.json())
-    .then((json) => json.map((repo: any) => repo.name));
-
-  console.log(repos);
+    .then((json) => json.map((repo: any) => (
+      {
+        name: repo.name,
+        url: repo.url,
+      }
+    )));
 
   return {
     repos,
