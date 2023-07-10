@@ -53,13 +53,23 @@
       },
       0
     );
+    const totalExpectedActuals = data.issues.reduce(
+      (acc: number, issue: IIssue): number => {
+        const actual = issue.labels.find((label) => label.includes('A'));
+        const expected = issue.labels.find((label) => label.includes('E'));
+        return actual
+          ? acc + parseInt(actual[1])
+          : expected
+          ? acc + parseInt(expected[1])
+          : acc;
+      },
+      0
+    );
 
     const expectedTotal = (100 / totalExpected) * totalClosedExpected || 0;
-    const actualTotal = (100 / totalExpected) * totalClosed || 0;
-    console.log(totalClosedExpected);
+    const actualTotal = (100 / totalExpectedActuals) * totalClosed || 0;
     actualProgress = parseInt(actualTotal.toFixed(4)) / 100;
     expectedProgress = parseInt(expectedTotal.toFixed(4)) / 100;
-    console.log(actualProgress, expectedProgress);
   }
 </script>
 
@@ -70,13 +80,12 @@
   <Progressbar progress={expectedProgress} class="bg-slate-200 m-20" />
   <h2 class="m-20 text-4xl">
     Actual Progress: {(actualProgress * 100).toFixed(2)} %
-    <p>(bigger is better)</p>
   </h2>
   <Progressbar
     progress={actualProgress}
     class="bg-slate-200 text-sky-400 m-20"
   />
-  <ul class="pl-5">
+  <ul class="pl-5 m-8">
     {#each data.issues as issue}
       <h2>
         {issue.labels.join(' -> ')}
