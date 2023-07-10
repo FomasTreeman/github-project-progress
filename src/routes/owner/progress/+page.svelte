@@ -1,6 +1,6 @@
 <script lang="ts">
   import { Page, Progressbar } from 'konsta/svelte';
-  import type { IIssue } from '../../progress/$types.js';
+  import type { IIssue } from '../../../types/types';
   export let data;
   let expectedProgress = 0;
   let actualProgress = 0;

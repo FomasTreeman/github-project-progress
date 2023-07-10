@@ -1,5 +1,5 @@
 import githubFetch from '../../../utils/fetch';
-import type { IIssue } from '../../progress/$types';
+import type { IIssue } from '../../../types/types';
 
 const expectedLabels = ['E1', 'E2', 'E3', 'E5', 'E8', 'A1', 'A2', 'A3', 'A5', 'A8']
 const relativeColours = []
