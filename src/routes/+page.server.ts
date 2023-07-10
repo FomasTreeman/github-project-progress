@@ -1,7 +1,7 @@
 import { redirect } from '@sveltejs/kit';
 import fetch from 'node-fetch';
 
-export async function load({ cookies }) {
+export async function load({ cookies }: {cookies: any}) {
   const session = cookies.get('session');
   // fetch repos and issues and add them to the props
   if (!session) return;

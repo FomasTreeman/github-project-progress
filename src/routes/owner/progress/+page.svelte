@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import { Page, Progressbar } from 'konsta/svelte';
   export let data;
   let progress = 0;
@@ -8,13 +8,14 @@
    * @param {string} type - expected or actual (E or A)
    * @return {number}
    */
-  const expectedActualTotal = (type) => {
+  const expectedActualTotal = (type: string) => {
+    //why doesnt jsdoc work here?
     return data.issues.reduce(
-      (acc, issue) =>
+      (acc: number, issue: any) =>
         acc +
           parseInt(
             issue.labels
-              .find((label) => label.toUpperCase().includes(type))
+              .find((label: string) => label.toUpperCase().includes(type))
               ?.slice(1)
           ) || 0,
       0
@@ -29,7 +30,7 @@
     console.log(data.issues.length);
     const total = (totalExpected / data.issues.length) * totalActuals;
     // progress = total / totalCompleted;
-    progress = (total / 100).toFixed(2);
+    progress = parseInt((total / 100).toFixed(2));
   }
 </script>
 

@@ -1,4 +1,4 @@
-export async function load({ parent }) {
+export async function load({ parent }: {parent: any}) {
   const { token, user } = await parent();
 
   const repos = await fetch(
@@ -11,7 +11,7 @@ export async function load({ parent }) {
     }
   )
     .then((r) => r.json())
-    .then((json) => json.map((repo) => repo.name));
+    .then((json) => json.map((repo: any) => repo.name));
 
   console.log(repos);
 

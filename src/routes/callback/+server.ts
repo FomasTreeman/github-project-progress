@@ -12,7 +12,7 @@ const userURL = 'https://api.github.com/user';
 const clientId = import.meta.env.VITE_CLIENT_ID;
 const secret = import.meta.env.VITE_CLIENT_SECRET;
 
-export async function GET({ url, cookies }: {url: {searchParams: {get: (code: string) => string}} ,cookies: {get: (cookie: string) => string}, set: (name:string, content: string) => {}}) {
+export async function GET({ url, cookies }: {url: {searchParams: {get: (code: string) => string}} ,cookies: {get: (cookie: string) => string, set: (name:string, content: string) => {}}}) {
   const code = url.searchParams.get('code');
 
   // get accessToken
