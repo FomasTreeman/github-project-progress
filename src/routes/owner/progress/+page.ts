@@ -16,7 +16,7 @@ export async function load({ url, parent, fetch }: {url: any, parent: any, fetch
 
   const issues: IIssue[] = await githubFetch(fetch,
     token.access_token,
-    `/repos/${user.login}/${repo}/issues?state=all`
+    `/repos/${user.login}/${repo}/issues?state=all&per_page=50&sort=created`
   ).then((json) =>
     json.map((issue: any) => ({
       labels: issue.labels.map((label: any) => label.name),
